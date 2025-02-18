@@ -12,13 +12,24 @@ import com.himanshu_kumar.expensetracker.data.model.ExpenseSummary
 
 
 class StatsViewModel(private val dao: ExpenseDao): ViewModel() {
-    val entries = dao.getAllExpenseByDate()
-    val topEntries = dao.getTopExpenses()
+    val expenseEntries = dao.getAllExpenseByDate()
+    val topExpense = dao.getTopExpenses()
 
-    fun getEntriesForChart(entries:List<ExpenseSummary>):List<Entry>{
+    val incomeEntries = dao.getAllIncomeByDate()
+    val topIncome = dao.getTopIncome()
+
+    fun getEntriesForChart(entries:List<ExpenseSummary>):List<Entry>{              // used to change the data from ExpenseSummary to Entry
         val list = mutableListOf<Entry>()
         for(entry in entries)
         {
+            list.add(Entry(entry.date.toFloat(), entry.total_amount.toFloat()))
+        }
+        return list
+    }
+
+    fun getIncomeEntriesForChart(incomeEntries:List<ExpenseSummary>):List<Entry>{
+        val list = mutableListOf<Entry>()
+        for (entry in incomeEntries){
             list.add(Entry(entry.date.toFloat(), entry.total_amount.toFloat()))
         }
         return list

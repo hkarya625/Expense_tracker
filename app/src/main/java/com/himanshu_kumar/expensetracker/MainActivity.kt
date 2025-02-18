@@ -21,6 +21,7 @@ import kotlinx.coroutines.delay
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setContent {
             var showSplash by remember { mutableStateOf(true) }
             val userPreferences = remember { UserPreferences(this) }

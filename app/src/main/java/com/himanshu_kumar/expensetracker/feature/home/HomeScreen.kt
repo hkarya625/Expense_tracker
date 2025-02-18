@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.himanshu_kumar.expensetracker.R
@@ -43,10 +44,11 @@ import com.himanshu_kumar.expensetracker.data.model.ExpenseEntity
 import com.himanshu_kumar.expensetracker.ui.theme.fontFamily
 import com.himanshu_kumar.expensetracker.viewmodel.HomeViewModel
 import com.himanshu_kumar.expensetracker.viewmodel.HomeViewModelFactory
+import com.himanshu_kumar.expensetracker.viewmodel.UserViewModel
 
 
 @Composable
-fun HomeScreen(navController: NavController){
+fun HomeScreen(navController: NavController, userName:String){
     val viewModel:HomeViewModel = HomeViewModelFactory(LocalContext.current).create(HomeViewModel::class.java)
     Surface(
         modifier = Modifier.fillMaxSize()
@@ -78,7 +80,7 @@ fun HomeScreen(navController: NavController){
                     Text(text = "Good Afternoon, ", fontWeight = FontWeight.SemiBold, fontFamily = fontFamily, fontSize = 16.sp, color = Color.White)
                     Spacer(Modifier.height(2.dp))
                     Text(
-                        text = "Himanshu Arya",
+                        text = userName,
                         fontFamily = fontFamily,
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
@@ -307,5 +309,8 @@ fun TransactionItem(title: String, amount: String, icon: Int, date:String, color
 @Composable
 fun PreviewHomeScreen()
 {
-    HomeScreen(rememberNavController())
+    HomeScreen(
+        rememberNavController(),
+        userName = "Himanshu Arya"
+    )
 }

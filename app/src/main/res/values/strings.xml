@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Expense Tracker</string>
+    <string name="intro_image1_title">"Welcome to Expense Tracker"</string>
+    <string name="intro_image1_des">Discover amazing features to manage and track your expenses effortlessly.</string>
+    <string name="intro_image2_title">"Seamless Tracking"</string>
+    <string name="intro_image2_des">"Effortlessly track your income, expenses, and savings to build better financial habits and stay in control."</string>
+    <string name="ask_name">Please Enter Your Name</string>
 </resources>

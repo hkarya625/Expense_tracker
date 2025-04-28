@@ -82,3 +82,9 @@
 
 ---
 
+<h2>🎥 Demo Video</h2>
+
+<p>
+  Watch the full demo here:<br>
+  <a href="https://ik.imagekit.io/zgqm2s7uc/expense_traker_demo.mp4?updatedAt=1745841357423" target="_blank">▶️ Expense Tracker App Demo Video</a>
+</p>

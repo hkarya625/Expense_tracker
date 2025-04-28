@@ -142,6 +142,7 @@ fun DataForm(modifier: Modifier, onAddExpenseClick:(model:ExpenseEntity) ->Unit)
     val dateVisibility = remember { mutableStateOf(false) }
     val category = remember { mutableStateOf("") }
     val type = remember { mutableStateOf("") }
+    val lended = remember{ mutableStateOf<String>("") }
 
     val lend_to_visibility = remember { mutableStateOf(false) }
     Column(
@@ -218,12 +219,12 @@ fun DataForm(modifier: Modifier, onAddExpenseClick:(model:ExpenseEntity) ->Unit)
         Spacer(Modifier.size(8.dp))
 
         if(category.value == "Lend"){
-            Text(text = "Lend To", fontFamily = fontFamily, fontSize = 14.sp)
+            Text(text = "Lended To", fontFamily = fontFamily, fontSize = 14.sp)
             Spacer(Modifier.size(4.dp))
             OutlinedTextField(
-                value = amount.value,
+                value = lended.value,
                 onValueChange = {
-                    amount.value = it
+                    lended.value = it
                 },
                 shape = RoundedCornerShape(5.dp),
                 modifier = Modifier.fillMaxWidth(),
@@ -254,7 +255,8 @@ fun DataForm(modifier: Modifier, onAddExpenseClick:(model:ExpenseEntity) ->Unit)
                     amount = amount.value.toDoubleOrNull()?:0.0,
                     date = date.longValue,
                     category = category.value,
-                    type = type.value
+                    type = type.value,
+                    lendedTo = lended.value
                 )
                 Log.d("Button_clicked_TAG", "DataForm: $model")
                 onAddExpenseClick(model)
@@ -345,9 +347,3 @@ fun ExpenseDropDown(list:List<String>, onItemSelected:(item:String)->Unit){
     }
 }
 
-@Composable
-@Preview(showBackground = true)
-fun AddExpensePreview()
-{
-    AddExpense(rememberNavController())
-}

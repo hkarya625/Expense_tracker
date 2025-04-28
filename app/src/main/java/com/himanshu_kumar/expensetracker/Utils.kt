@@ -48,7 +48,7 @@ object Utils {
             return R.drawable.ic_shopping
 
         if(item.category == "Food")
-            return R.drawable.ic_zomato
+            return R.drawable.ic_food
 
         if(item.category == "Salary")
             return R.drawable.ic_salary

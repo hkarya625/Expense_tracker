@@ -18,6 +18,9 @@ class StatsViewModel(private val dao: ExpenseDao): ViewModel() {
     val incomeEntries = dao.getAllIncomeByDate()
     val topIncome = dao.getTopIncome()
 
+    val lendEntries = dao.getAllLendByDate()
+    val topLend = dao.getTopLend()
+
     fun getEntriesForChart(entries:List<ExpenseSummary>):List<Entry>{              // used to change the data from ExpenseSummary to Entry
         val list = mutableListOf<Entry>()
         for(entry in entries)

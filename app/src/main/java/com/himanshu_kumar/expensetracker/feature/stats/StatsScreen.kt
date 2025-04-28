@@ -5,12 +5,16 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Scaffold
@@ -28,6 +32,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -45,6 +50,8 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.himanshu_kumar.expensetracker.R
 import com.himanshu_kumar.expensetracker.Utils
+import com.himanshu_kumar.expensetracker.data.model.ExpenseEntity
+import com.himanshu_kumar.expensetracker.feature.home.TransactionItem
 import com.himanshu_kumar.expensetracker.feature.home.TransactionList
 import com.himanshu_kumar.expensetracker.ui.theme.fontFamily
 import com.himanshu_kumar.expensetracker.viewmodel.StatsViewModel
@@ -101,8 +108,10 @@ fun StatsScreen(navController: NavController){
 
         val (dataState, transactionList) = if (transactionType == "Expense") {
             viewModel.expenseEntries.collectAsState(emptyList()) to viewModel.topExpense.collectAsState(emptyList())
-        } else {
+        } else if(transactionType == "Income") {
             viewModel.incomeEntries.collectAsState(emptyList()) to viewModel.topIncome.collectAsState(emptyList())
+        }else{
+            viewModel.lendEntries.collectAsState(emptyList()) to viewModel.topLend.collectAsState(emptyList())
         }
 
         Column(
@@ -121,11 +130,20 @@ fun StatsScreen(navController: NavController){
             val entries = viewModel.getEntriesForChart(dataState.value)
             LineChart(entries)
             Spacer(Modifier.height(16.dp))
-            TransactionList(
-                modifier = Modifier,
-                list = transactionList.value,
-                title = "Top Spending"
-            )
+
+            if(transactionType == "Lend"){
+                LendedList(
+                    modifier = Modifier,
+                    list = transactionList.value,
+                    title = "Recent Transactions"
+                )
+            }else{
+                TransactionList(
+                    modifier = Modifier,
+                    list = transactionList.value,
+                    title = if(transactionType == "Expense") "Top Expenses" else "Top Income"
+                )
+            }
         }
     }
 }
@@ -138,7 +156,7 @@ fun TransactionTypeDropDown(
 ){
 
     var dropDownExpand by remember { mutableStateOf(true) }
-    val transactionType = listOf("Expense", "Income")
+    val transactionType = listOf("Expense", "Income", "Lend")
 
 
     Box(
@@ -213,6 +231,97 @@ fun LineChart(entries:List<Entry>){
 
     }
 }
+
+
+
+
+@Composable
+fun LendedList(modifier: Modifier, list:List<ExpenseEntity>, title: String){
+    LazyColumn(
+        modifier = modifier
+            .padding(horizontal = 16.dp)
+    ) {
+        item {
+            Box(
+                modifier = Modifier.fillMaxWidth().padding(end = 8.dp)
+            ){
+                Text(text = title,
+                    fontFamily = fontFamily,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp)
+                if(title == "Recent Transactions")
+                {
+                    Text(
+                        text = "See All",
+                        fontFamily = fontFamily,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp,
+                        modifier = Modifier.align(Alignment.CenterEnd)
+                    )
+                }
+            }
+        }
+        items(list){
+                item ->
+            LendListItem(
+                title = item.title,
+                amount = item.amount.toString(),
+                icon = Utils.getItemIcon(item),
+                date = Utils.formatDateToHumanReadableForm(dateInMillis = item.date),
+                color = if(item.type == "Income") Color.Green else Color.Red
+            )
+        }
+
+    }
+}
+
+
+@Composable
+fun LendListItem(title: String, amount: String, icon: Int, date:String, color:Color){
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp, horizontal = 8.dp)
+    ){
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Image(
+                painter = painterResource(id = icon),
+                contentDescription = null,
+                modifier = Modifier.size(50.dp)
+            )
+            Spacer(modifier = Modifier.size(8.dp))
+            Column {
+                Text(
+                    text = title,
+                    fontFamily = fontFamily,
+                    fontSize = 16.sp
+                )
+                Text(
+                    text = date,
+                    fontFamily = fontFamily,
+                    fontSize = 12.sp
+                )
+            }
+        }
+        Text(
+            text = "₹ $amount",
+            fontSize = 16.sp,
+            modifier = Modifier.align(Alignment.CenterEnd),
+            color = color
+        )
+
+//        Checkbox(
+//            checked = isPaid,
+//            onCheckedChange = {
+//                onChecked(true)
+//            },
+//            modifier = Modifier.align(Alignment.CenterEnd).padding(end = 20.dp)
+//        )
+    }
+}
+
 
 @Preview(showBackground = true)
 @Composable

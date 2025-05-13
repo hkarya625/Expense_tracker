@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  A simple and powerful Android application to manage and track your incomes and expenses locally with beautiful stats and smooth UI.
+  A simple and powerful Android application to manage and track user's incomes and expenses locally with beautiful stats and smooth UI.
 </p>
 
 ---
